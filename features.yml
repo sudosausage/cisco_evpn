@@ -1,0 +1,16 @@
+---
+ - name: Start the automation process
+   hosts: cicso_all
+   connection: network_cli
+   gather_facts: no
+
+   tasks:
+    - name: Enable Netconf
+      junos_netconf:
+        netconf_port: 830
+        state: present
+      register: response
+
+    - name: Print Diff
+      debug:
+        var: response

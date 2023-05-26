@@ -1,0 +1,11 @@
+[cisco_all:children]
+cisco_leafs
+cisco_spines
+
+[cisco_spines]
+Spine-1 ansible_host=10.255.1.101
+Spine-2 ansible_host=10.255.1.102
+
+[cisco_leafs]
+Leaf-1 ansible_host=10.255.1.111
+Leaf-2 ansible_host=10.255.1.112

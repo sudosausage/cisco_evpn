@@ -50,6 +50,6 @@ vrf:
       - "10.220.10.0/24"
 
 vlan:
-  vlan_id: "10"
-  vlan_name: "DMZ-A"
-  vlan_vni: "1100011"
+  - vlan_id: "10"
+    vlan_name: "DMZ-A"
+    vlan_vni: "1100011"

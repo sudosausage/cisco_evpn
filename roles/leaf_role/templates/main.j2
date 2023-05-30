@@ -19,7 +19,6 @@ interface {{ interface.interface }}
   mtu 9216
 {% endif %}
 {% if interface.type is defined and 'loopback' in interface.type %}
-  no switchport
   ip address {{ interface.ipv4_addr }}/{{ interface.ipv4_mask }}
   ip router ospf 1 area 0.0.0.0
   ip router ospf 1 passive-interface

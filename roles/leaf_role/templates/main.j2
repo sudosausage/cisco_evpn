@@ -1,5 +1,11 @@
 {% set device = hostvars[inventory_hostname] %}
 
+{# OSPF Section #}
+
+router ospf 1
+  router-id {{ device.rid }}
+!
+
 {# Interface Section #}
 
 {% for interface in device.interfaces %}
@@ -48,9 +54,6 @@ vrf context {{ vrf.name }}
     route-target export {{ device.asn }}:{{ vrf.rd }}
 !
 {% endfor %}
-router ospf 1
-  router-id {{ device.rid }}
-!
 router bgp {{ device.asn }}
   router-id {{ device.rid }}
   address-family ipv4 unicast
@@ -71,7 +74,7 @@ router bgp {{ device.asn }}
       network {{ vrf.networks }}
       advertise l2vpn evpn
 {% endfor %}
-
+exit
 {# EVPN Section #}
 
 fabric forwarding anycast-gateway-mac 0000.0002.0003

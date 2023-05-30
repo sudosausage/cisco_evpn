@@ -30,10 +30,10 @@ interface {{ ifd }}
 {% endfor %}
 
 {% for vlan in device.vlan.items() %}
-vlan {{ }}
+vlan {{ vlan.id }}
   name shared_infra
-  vn-segment 1100010
-
+  vn-segment {{ vlan.vni }}
+{% endfor %}
 #Routing Section
 
 {% for name, vrf in device.vrf.items() %}

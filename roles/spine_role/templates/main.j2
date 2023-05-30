@@ -1,6 +1,11 @@
 {% set device = hostvars[inventory_hostname] %}
 
-#Interface Section
+{# OSPF Section #}
+
+router ospf 1
+  router-id {{ device.rid }}
+
+{# Interface Section #}
 
 {% for interface in device.interfaces %}
 interface {{ interface.interface }}
@@ -19,19 +24,18 @@ interface {{ interface.interface }}
 {% endif %}
   description {{ interface.description }}
   no shutdown
-!
+
 {% endfor %}
 
-router ospf 1
-  router-id {{ device.rid }}
-!
+{# Routing Section #}
+
 router bgp {{ device.asn }}
   router-id {{ device.rid }}
   address-family ipv4 unicast
 {% for bgp in device.bgp %}
   neighbor {{ bgp.neighbor_ip }}
     remote-as {{ bgp.remote_asn }}
-    description {{ bbgp.neighbor_desc }}
+    description {{ bgp.neighbor_desc }}
     update-source loopback0
     address-family l2vpn evpn
       send-community

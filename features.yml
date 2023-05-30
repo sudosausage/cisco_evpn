@@ -1,16 +1,50 @@
 ---
- - name: Start the automation process
-   hosts: cicso_all
-   connection: network_cli
+ - name: Enabling the required Features
+   hosts: cisco_all
    gather_facts: no
 
    tasks:
-    - name: Enable Netconf
-      junos_netconf:
-        netconf_port: 830
-        state: present
-      register: response
+    - name: Enable LACP
+      cisco.nxos.nxos_feature:
+        feature: lacp
+        state: enabled
 
-    - name: Print Diff
-      debug:
-        var: response
+    - name: Enable Int Vlan
+      cisco.nxos.nxos_feature:
+        feature: interface-vlan
+        state: enabled
+
+    - name: Enable NXAPI
+      cisco.nxos.nxos_feature:
+        feature: nxapi
+        state: enabled
+
+    - name: Enable NV
+      cisco.nxos.nxos_feature:
+        feature: nve
+        state: enabled
+
+    - name: Enable OSPF
+      cisco.nxos.nxos_feature:
+        feature: ospf
+        state: enabled
+
+    - name: Enable BGP
+      cisco.nxos.nxos_feature:
+        feature: bgp
+        state: enabled
+
+    - name: Enable BFD
+      cisco.nxos.nxos_feature:
+        feature: bfd
+        state: enabled
+
+    - name: Enable VN Segment
+      cisco.nxos.nxos_feature:
+        feature: vn-segment-vlan-based
+        state: enabled
+
+    - name: Enable EVPN
+      cisco.nxos.nxos_feature:
+        feature: ngmvpn
+        state: enabled

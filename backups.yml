@@ -1,0 +1,25 @@
+---
+- hosts: cisco_all
+  gather_facts: false
+  tasks:
+
+  - name: show run
+    cisco.nxos.nxos_command:
+      commands:
+      - command: show run | grep nbm
+        output: text
+    register: config
+
+  - name: save output to /backups
+    copy:
+      content: "{{ config.stdout[0] }}"
+      dest: "backups/{{ inventory_hostname }}.txt"
+
+    - name: NXOS >> Save Configuration to NVRAM
+      cisco.nxos.nxos_config:
+        save_when: modified
+      register: output
+
+    - name: DEBUG >> output
+      debug:
+        msg: "{{ output }}"

@@ -1,0 +1,18 @@
+---
+- name: User Creation
+  hosts: cisco_spines
+  gather_facts: false
+
+  tasks:
+    - name: New User Creation
+      cisco.nxos.nxos_user:
+        name: ansible
+        state: present
+        roles: network-admin
+        configured_password: Ansible1!
+        update_password: on_create
+      register: response
+
+    - name: print output
+      debug:
+        var: response.stdout_lines

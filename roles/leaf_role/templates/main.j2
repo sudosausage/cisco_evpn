@@ -1,0 +1,28 @@
+{% set device = hostvars[inventory_hostname] %}
+
+{% for ifd, interface in device.interfaces.items() %}
+interface {{ ifd }}
+{% if interface.vrf is defined %}
+  vrf member {{ interface.vrf }}
+{% endif %}
+{% if interface.type is defined and 'routed' in interface.type %}
+  no switchport
+  ip address {{ interface.ipv4_addr }}/{{ interface.ipv4_mask }}
+  ip router ospf 1 area 0.0.0.0
+  mtu 9216
+{% endif %}
+{% if interface.type is defined and 'routed' in interface.type %}
+  no switchport
+  ip address {{ interface.ipv4_addr }}/{{ interface.ipv4_mask }}
+  ip router ospf 1 area 0.0.0.0
+  ip router ospf 1 passive-interface
+{% endif %}
+{% if interface.type is defined and 'vlan' in interface.type %}
+  ip address {{ interface.ipv4_addr }}/{{ interface.ipv4_mask }}
+  fabric forwarding mode anycast-gateway
+  no ip redirects
+{% endif %}
+  description {{ interface.description }}
+  no shutdown
+!
+{% endfor %}

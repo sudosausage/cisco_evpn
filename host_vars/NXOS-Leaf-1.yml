@@ -1,0 +1,28 @@
+---
+name: "NXOS-Leaf-1"
+role: "Leaf"
+
+#Physical Interfaces
+interfaces:
+  - interface: Ethernet1/1
+    ipv4_addr: "10.255.101.2"
+    ipv4_mask: 31
+    description: "Link to Spine-1 Eth 1/1"
+    type: "routed"
+  - interface: Ethernet1/2
+    ipv4_addr: "10.255.102.4"
+    ipv4_mask: 31
+    description: "Link to Spine-2 Eth 1/2"
+    type: "routed"
+  - interface: loopback0
+    ipv4_addr: "10.255.250.111"
+    ipv4_mask: 32
+    description: "BGP + OSPF RID"
+    type: "loopback"
+  - interface: Vlan10
+    ipv4_addr: "10.0.2.1"
+    ipv4_mask: 31
+    description: "Link to Spine-2"
+    vlan: 10
+    vrf: DMZ-A
+    type: "vlan"

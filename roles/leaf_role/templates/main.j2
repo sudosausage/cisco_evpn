@@ -39,10 +39,10 @@ vlan {{ vlan.vlan_id }}
 {% for name, vrf in device.vrf.items() %}
 vrf context {{ name }}
   vni {{ vrf.vni }}
-  rd {{ asn }}:{{ vrf.rd }}
+  rd {{ device.asn }}:{{ vrf.rd }}
   address-family ipv4 unicast
-    route-target import {{ asn }}:{{ vrf.rd }}
-    route-target export {{ asn }}:{{ vrf.rd }}
+    route-target import {{ device.asn }}:{{ vrf.rd }}
+    route-target export {{ device.asn }}:{{ vrf.rd }}
 !
 {% endfor %}
 router ospf 1

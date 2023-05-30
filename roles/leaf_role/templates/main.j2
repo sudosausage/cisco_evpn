@@ -1,6 +1,6 @@
 {% set device = hostvars[inventory_hostname] %}
 
-#Interface Section
+{# Interface Section #}
 
 {% for interface in device.interfaces %}
 interface {{ interface.interface }}
@@ -29,59 +29,62 @@ interface {{ interface.interface }}
 !
 {% endfor %}
 
-#{% for vlan in device.vlan %}
-#vlan {{ vlan.vlan_id }}
-#  name shared_infra
-#  vn-segment {{ vlan.vlan_vni }}
-#{% endfor %}
-#Routing Section
+{# Vlan Section #}
 
-#{% for vrf in device.vrf %}
-#vrf context {{ vrf.name }}
-#  vni {{ vrf.vni }}
-#  rd {{ device.asn }}:{{ vrf.rd }}
-#  address-family ipv4 unicast
-#    route-target import {{ device.asn }}:{{ vrf.rd }}
-#    route-target export {{ device.asn }}:{{ vrf.rd }}
-#!
-#{% endfor %}
-#router ospf 1
-#  router-id {{ device.rid }}
-#!
-#router bgp {{ device.asn }}
-#  router-id {{ device.rid }}
-#  address-family ipv4 unicast
-#  address-family l2vpn evpn
-#    advertise-pip
-#{% for bgp in device.bgp %}
-#  neighbor {{ bgp.neighbor_ip }}
-#    remote-as {{ bgp.remote_asn }}
-#    description {{ bgp.neighbor_desc }}
-#    update-source loopback0
-#    address-family l2vpn evpn
-#      send-community
-#      send-community extended
-#{% endfor %}
-#{% for vrf in device.vrf %}
-#  vrf {{ vrf.name }}
-#    address-family ipv4 unicast
-#      network {{ vrf.networks }}
-#      advertise l2vpn evpn
-#{% endfor %}
+{% for vlan in device.vlan %}
+vlan {{ vlan.vlan_id }}
+  name shared_infra
+  vn-segment {{ vlan.vlan_vni }}
+{% endfor %}
 
-#EVPN Specific
+{# Routing Section #}
 
-#fabric forwarding anycast-gateway-mac 0000.0002.0003
-#interface nve1
-#  no shutdown
-#  host-reachability protocol bgp
-#  advertise virtual-rmac
-#  source-interface loopback1
-#{% for vrf in device.vrf %}
-#  member vni {{ vrf.vni }} associate-vrf
-#{% endfor %}
-#{% for vlan in device.vlan %}
-#  member vni {{ vlan.vlan_vni }}
-#    suppress-arp
-#    ingress-replication protocol bgp
-#{% endfor %}
+{% for vrf in device.vrf %}
+vrf context {{ vrf.name }}
+  vni {{ vrf.vni }}
+  rd {{ device.asn }}:{{ vrf.rd }}
+  address-family ipv4 unicast
+    route-target import {{ device.asn }}:{{ vrf.rd }}
+    route-target export {{ device.asn }}:{{ vrf.rd }}
+!
+{% endfor %}
+router ospf 1
+  router-id {{ device.rid }}
+!
+router bgp {{ device.asn }}
+  router-id {{ device.rid }}
+  address-family ipv4 unicast
+  address-family l2vpn evpn
+    advertise-pip
+{% for bgp in device.bgp %}
+  neighbor {{ bgp.neighbor_ip }}
+    remote-as {{ bgp.remote_asn }}
+    description {{ bgp.neighbor_desc }}
+    update-source loopback0
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+{% endfor %}
+{% for vrf in device.vrf %}
+  vrf {{ vrf.name }}
+    address-family ipv4 unicast
+      network {{ vrf.networks }}
+      advertise l2vpn evpn
+{% endfor %}
+
+{# EVPN Section #}
+
+fabric forwarding anycast-gateway-mac 0000.0002.0003
+interface nve1
+  no shutdown
+  host-reachability protocol bgp
+  advertise virtual-rmac
+  source-interface loopback1
+{% for vrf in device.vrf %}
+  member vni {{ vrf.vni }} associate-vrf
+{% endfor %}
+{% for vlan in device.vlan %}
+  member vni {{ vlan.vlan_vni }}
+    suppress-arp
+    ingress-replication protocol bgp
+{% endfor %}

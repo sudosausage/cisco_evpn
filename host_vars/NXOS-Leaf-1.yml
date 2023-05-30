@@ -1,28 +1,50 @@
 ---
 name: "NXOS-Leaf-1"
 role: "Leaf"
+asn: "64512"
+rid: "10.255.250.111"
 
 #Physical Interfaces
 interfaces:
-  - interface: Ethernet1/1
+  - interface: "Ethernet1/1"
     ipv4_addr: "10.255.101.2"
-    ipv4_mask: 31
+    ipv4_mask: "31"
     description: "Link to Spine-1 Eth 1/1"
     type: "routed"
-  - interface: Ethernet1/2
+  - interface: "Ethernet1/2"
     ipv4_addr: "10.255.102.4"
-    ipv4_mask: 31
+    ipv4_mask: "31"
     description: "Link to Spine-2 Eth 1/2"
     type: "routed"
-  - interface: loopback0
+  - interface: "loopback0"
     ipv4_addr: "10.255.250.111"
-    ipv4_mask: 32
+    ipv4_mask: "32"
     description: "BGP + OSPF RID"
     type: "loopback"
-  - interface: Vlan10
+  - interface: "Vlan10"
     ipv4_addr: "10.0.2.1"
-    ipv4_mask: 31
+    ipv4_mask: "31"
     description: "Link to Spine-2"
-    vlan: 10
-    vrf: DMZ-A
+    vlan: "10"
+    vrf: "DMZ-A"
     type: "vlan"
+
+bgp:
+  - neighbor_ip: "10.255.101.1"
+    neighbor_desc: "Spine-1"
+    remote_asn: "64512"
+  - neighbor_ip: "10.255.102.3"
+    neighbor_desc: "Spine-2"
+    remote_asn: "64512"
+
+vrf:
+  - name: "DMZ-A"
+    vni: "1110000"
+    rd: "11"
+    networks:
+      - "10.220.10.0/24"
+
+vlan:
+  vlan_id: "10"
+  vlan_name: "DMZ-A"
+  vlan_vni: "1100011"

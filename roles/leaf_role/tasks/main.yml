@@ -6,6 +6,7 @@
   run_once: true
 
 - name: Templating VXLAN Config
+  hosts: cisco_leafs
   template:
     src: main.j2
     dest: "./config_files/leaf_role_config/{{ inventory_hostname }}.conf"

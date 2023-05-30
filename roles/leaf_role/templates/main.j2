@@ -69,7 +69,9 @@ router bgp {{ device.asn }}
 {% for vrf in device.vrf %}
   vrf {{ vrf.name }}
     address-family ipv4 unicast
-      network {{ vrf.networks }}
+{% for networks in vrf.networks %}
+      network {{ networks }}
+{% endfor %}
       advertise l2vpn evpn
 {% endfor %}
 exit

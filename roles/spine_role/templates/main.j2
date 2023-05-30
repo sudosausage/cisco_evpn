@@ -29,30 +29,12 @@ interface {{ ifd }}
 !
 {% endfor %}
 
-{% for vlan in device.vlan.items() %}
-vlan {{ }}
-  name shared_infra
-  vn-segment 1100010
-
-#Routing Section
-
-{% for name, vrf in device.vrf.items() %}
-vrf context {{ name }}
-  vni {{ vrf.vni }}
-  rd {{ asn }}:{{ vrf.rd }}
-  address-family ipv4 unicast
-    route-target import {{ asn }}:{{ vrf.rd }}
-    route-target export {{ asn }}:{{ vrf.rd }}
-!
-{% endfor %}
 router ospf 1
   router-id {{ device.rid }}
 !
 router bgp {{ device.asn }}
   router-id {{ device.rid }}
   address-family ipv4 unicast
-  address-family l2vpn evpn
-    advertise-pip
 {% for bgp in device.bgp.items() %}
   neighbor {{ bgp.neighbor_ip }}
     remote-as {{ bgp.remote_asn }}
@@ -61,27 +43,5 @@ router bgp {{ device.asn }}
     address-family l2vpn evpn
       send-community
       send-community extended
-{% endfor %}
-{% for name, vrf in device.vrf.items() %}
-  vrf {{ name }}
-    address-family ipv4 unicast
-      network {{ vrf.networks }}
-      advertise l2vpn evpn
-{% endfor %}
-
-#EVPN Specific
-
-fabric forwarding anycast-gateway-mac 0000.0002.0003
-interface nve1
-  no shutdown
-  host-reachability protocol bgp
-  advertise virtual-rmac
-  source-interface loopback1
-{% for vrf in device.vrf.items() %}
-  member vni {{ vrf.vni }} associate-vrf
-{% endfor %}
-{% for vlan in device.vlan.items() %}
-  member vni {{ vlan.vlan_vni }}
-    suppress-arp
-    ingress-replication protocol bgp
+      route-reflector-client
 {% endfor %}

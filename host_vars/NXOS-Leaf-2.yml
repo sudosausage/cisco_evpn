@@ -1,28 +1,28 @@
 ---
-name: "NXOS-Leaf-1"
+name: "NXOS-Leaf-2"
 role: "Leaf"
 asn: "64512"
-rid: "10.255.250.111"
+rid: "10.255.250.112"
 
 #Physical Interfaces
 interfaces:
   - interface: "Ethernet1/1"
-    ipv4_addr: "10.255.101.2"
+    ipv4_addr: "10.255.102.2"
     ipv4_mask: "31"
-    description: "Link to Spine-1 Eth 1/1"
+    description: "Link to Spine-2 Eth 1/1"
     type: "routed"
   - interface: "Ethernet1/2"
-    ipv4_addr: "10.255.102.4"
+    ipv4_addr: "10.255.101.4"
     ipv4_mask: "31"
-    description: "Link to Spine-2 Eth 1/2"
+    description: "Link to Spine-1 Eth 1/2"
     type: "routed"
   - interface: "loopback0"
-    ipv4_addr: "10.255.250.111"
+    ipv4_addr: "10.255.250.112"
     ipv4_mask: "32"
     description: "BGP + OSPF RID"
     type: "loopback"
   - interface: "loopback1"
-    ipv4_addr: "10.255.251.111"
+    ipv4_addr: "10.255.251.112"
     ipv4_mask: "32"
     description: "VTEP IP"
     type: "loopback"
@@ -35,11 +35,11 @@ interfaces:
     type: "vlan"
 
 bgp:
-  - neighbor_ip: "10.255.101.1"
-    neighbor_desc: "Spine-1"
-    remote_asn: "64512"
-  - neighbor_ip: "10.255.102.3"
+  - neighbor_ip: "10.255.102.1"
     neighbor_desc: "Spine-2"
+    remote_asn: "64512"
+  - neighbor_ip: "10.255.101.3"
+    neighbor_desc: "Spine-1"
     remote_asn: "64512"
 
 vrf:

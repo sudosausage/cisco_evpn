@@ -1,0 +1,15 @@
+---
+- name: Create Output DIR
+  file:
+    path: "./config_files/spine_role_config"
+    state: directory
+  run_once: true
+
+- name: Templating VXLAN Config
+  template:
+    src: main.j2
+    dest: "./config_files/spine_role_config/{{ inventory_hostname }}.conf"
+
+#- name: Pushing VXLAN Config
+#  cisco.nxos.nxos_config:
+#    src: "./config_files/spine_role_config/{{ inventory_hostname }}.conf"

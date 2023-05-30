@@ -1,0 +1,31 @@
+---
+name: "NXOS-Spine-1"
+role: "Spine"
+asn: "64512"
+rid: "10.255.250.101"
+
+#Physical Interfaces
+interfaces:
+  - interface: "Ethernet1/1"
+    ipv4_addr: "10.255.101.1"
+    ipv4_mask: "31"
+    description: "Link to Leaf-1 Eth 1/1"
+    type: "routed"
+  - interface: "Ethernet1/2"
+    ipv4_addr: "10.255.101.3"
+    ipv4_mask: "31"
+    description: "Link to Leaf-2 Eth 1/2"
+    type: "routed"
+  - interface: "loopback0"
+    ipv4_addr: "10.255.250.101"
+    ipv4_mask: "32"
+    description: "BGP + OSPF RID"
+    type: "loopback"
+
+bgp:
+  - neighbor_ip: "10.255.101.2"
+    neighbor_desc: "Leaf-1"
+    remote_asn: "64512"
+  - neighbor_ip: "10.255.101.3"
+    neighbor_desc: "Leaf-2"
+    remote_asn: "64512"

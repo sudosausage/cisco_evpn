@@ -32,7 +32,7 @@ interface {{ interface.interface }}
 {% endif %}
   description {{ interface.description }}
   no shutdown
-!
+
 {% endfor %}
 
 {# Vlan Section #}
@@ -52,7 +52,7 @@ vrf context {{ vrf.name }}
   address-family ipv4 unicast
     route-target import {{ device.asn }}:{{ vrf.rd }}
     route-target export {{ device.asn }}:{{ vrf.rd }}
-!
+
 {% endfor %}
 router bgp {{ device.asn }}
   router-id {{ device.rid }}

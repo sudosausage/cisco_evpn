@@ -2,8 +2,8 @@
 
 #Interface Section
 
-{% for ifd, interface in device.interfaces.items() %}
-interface {{ ifd }}
+{% for interface in device.interfaces %}
+interface {{ interface.interface }}
 {% if interface.vrf is defined %}
   vrf member {{ interface.vrf }}
 {% endif %}
@@ -36,8 +36,8 @@ interface {{ ifd }}
 #{% endfor %}
 #Routing Section
 
-#{% for name, vrf in device.vrf.items() %}
-#vrf context {{ name }}
+#{% for vrf in device.vrf %}
+#vrf context {{ vrf.name }}
 #  vni {{ vrf.vni }}
 #  rd {{ device.asn }}:{{ vrf.rd }}
 #  address-family ipv4 unicast
@@ -62,8 +62,8 @@ interface {{ ifd }}
 #      send-community
 #      send-community extended
 #{% endfor %}
-#{% for name, vrf in device.vrf.items() %}
-#  vrf {{ name }}
+#{% for vrf in device.vrf %}
+#  vrf {{ vrf.name }}
 #    address-family ipv4 unicast
 #      network {{ vrf.networks }}
 #      advertise l2vpn evpn

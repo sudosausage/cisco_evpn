@@ -2,8 +2,8 @@
 
 #Interface Section
 
-{% for ifd, interface in device.interfaces.items() %}
-interface {{ ifd }}
+{% for interface in device.interfaces %}
+interface {{ interface.interface }}
 {% if interface.vrf is defined %}
   vrf member {{ interface.vrf }}
 {% endif %}
@@ -13,16 +13,9 @@ interface {{ ifd }}
   ip router ospf 1 area 0.0.0.0
   mtu 9216
 {% endif %}
-{% if interface.type is defined and 'routed' in interface.type %}
-  no switchport
+{% if interface.type is defined and 'loopback' in interface.type %}
   ip address {{ interface.ipv4_addr }}/{{ interface.ipv4_mask }}
   ip router ospf 1 area 0.0.0.0
-  ip router ospf 1 passive-interface
-{% endif %}
-{% if interface.type is defined and 'vlan' in interface.type %}
-  ip address {{ interface.ipv4_addr }}/{{ interface.ipv4_mask }}
-  fabric forwarding mode anycast-gateway
-  no ip redirects
 {% endif %}
   description {{ interface.description }}
   no shutdown
@@ -35,10 +28,10 @@ router ospf 1
 router bgp {{ device.asn }}
   router-id {{ device.rid }}
   address-family ipv4 unicast
-{% for bgp in device.bgp.items() %}
+{% for bgp in device.bgp %}
   neighbor {{ bgp.neighbor_ip }}
     remote-as {{ bgp.remote_asn }}
-    description {{ bgp.description }}
+    description {{ bbgp.neighbor_desc }}
     update-source loopback0
     address-family l2vpn evpn
       send-community

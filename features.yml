@@ -48,3 +48,7 @@
       cisco.nxos.nxos_feature:
         feature: ngmvpn
         state: enabled
+
+    - name: Save Config when Modified
+      cisco.nxos.nxos_config:
+        save_when: modified
